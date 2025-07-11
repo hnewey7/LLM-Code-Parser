@@ -68,7 +68,6 @@ def split_human_LLM_response(file: StringIO) -> list[StringIO]:
     return responses
     
 
-
 def get_whitespace_per_line(file: StringIO):
     for line in file:
         whitespace = [i for i in line if i in string.whitespace]
