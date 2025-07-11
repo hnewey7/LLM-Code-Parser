@@ -55,15 +55,6 @@ class ConversationResponse(Response):
         responses.append(IndividualResponse(response,user))
         return responses
 
-    
-    def display_internal(self):
-        """
-        Display conversation with the internal response formatting.
-        """
-        for response in self.internal_responses:
-            response.display()
-            input(colored("Press any key to continue to next response...",attrs=["bold","blink"]))
-
 # - - - - - - - - - - - - - - - - - - -
 
 class IndividualResponse(Response):
@@ -91,6 +82,7 @@ class IndividualResponse(Response):
         """
         Display response only, no internal responses.
         """
+        self.buffer.seek(0)
         for line in self.buffer:
             print(colored(line,color=self.colour,attrs=self.display_attrs),end="")
 
