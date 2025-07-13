@@ -7,6 +7,7 @@ Created on 11-07-2025
 '''
 from io import StringIO
 from termcolor import colored
+import os
 
 # - - - - - - - - - - - - - - - - - - -
 
@@ -48,7 +49,7 @@ class ConversationResponse(Response):
         
         # Filter responses.
         for line in self.buffer:
-            for i, keyword in enumerate(keywords.values()):
+            for keyword in keywords.values():
                 if keyword in line:
                     # Add response to responses.
                     response.seek(0)
@@ -81,16 +82,7 @@ class IndividualResponse(Response):
         if self.user == "human" or self.user == "last":
             return "blue"
         else:
-            return "yellow"
-        
-    
-    def display(self):
-        """
-        Display response only, no internal responses.
-        """
-        self.buffer.seek(0)
-        for line in self.buffer:
-            print(colored(line,color=self.colour,attrs=self.display_attrs),end="")
+            return "yellow"      
 
 # - - - - - - - - - - - - - - - - - - -
 
