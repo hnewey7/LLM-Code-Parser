@@ -9,6 +9,7 @@ from typing import TextIO
 from io import StringIO
 import string
 from termcolor import colored
+import shutil
 
 # - - - - - - - - - - - - - - - - - - -
 # MODIFYING FILE.
@@ -109,11 +110,11 @@ if __name__ == "__main__":
     new_file = remove_extra_lines(f)
 
     # Get whitespace.
-    responses = split_human_LLM_response(new_file)
+    #responses = split_human_LLM_response(new_file)
 
     # Display conversation.
-    display_conversation(responses)
+    #display_conversation(responses)
 
-    # with open("output/test.txt","w", encoding="utf-8") as fd:
-    #     new_file.seek(0)
-    #     shutil.copyfileobj(new_file, fd)
+    with open("output/test.txt","w", encoding="utf-8") as fd:
+        new_file.seek(0)
+        shutil.copyfileobj(new_file, fd)

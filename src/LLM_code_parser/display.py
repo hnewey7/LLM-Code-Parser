@@ -46,7 +46,7 @@ class ResponseDisplayer():
         """
         Display options for navigating display.
         """
-        print(colored(f"=== Response {response_index+1}/{len(self.conversation.internal_responses)} ===",attrs=["bold"]))
+        print(colored(f"\n=== Response {response_index+1}/{len(self.conversation.internal_responses)} ===",attrs=["bold"]))
         print(colored("[\u2191] Previous Response",attrs=["bold"]))
         print(colored("[\u2193] Next Response",attrs=["bold"]))
         print(colored("[Q] Quit",attrs=["bold"]))

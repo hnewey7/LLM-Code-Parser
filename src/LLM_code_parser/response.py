@@ -35,20 +35,26 @@ class ConversationResponse(Response):
         Returns:
             list[IndividualResponse]: List of individual responses.
         """
-        keywords = ["Human:","Assistant:"]
+        keywords = {
+            "human":"Human:",
+            "assistant":"Assistant:",
+            "last":"Last Human Response",
+            "response_a":"Model Response A",
+            "response_b":"Model Response B"
+        }
         response = StringIO()
         user = "human"
         responses = []
         
         # Filter responses.
         for line in self.buffer:
-            for keyword in keywords:
+            for i, keyword in enumerate(keywords.values()):
                 if keyword in line:
                     # Add response to responses.
                     response.seek(0)
                     responses.append(IndividualResponse(response,user))
                     # Determining user of next response.
-                    user = "human" if keyword == keywords[0] else "assistant"
+                    user = next((k for k, v in keywords.items() if v == keyword), None)
                     # Create new StringIO.
                     response = StringIO()
             response.write(line)
@@ -72,7 +78,7 @@ class IndividualResponse(Response):
         Returns:
             str: Colour string.
         """
-        if self.user == "human":
+        if self.user == "human" or self.user == "last":
             return "blue"
         else:
             return "yellow"
