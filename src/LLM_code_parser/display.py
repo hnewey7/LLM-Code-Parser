@@ -25,7 +25,8 @@ class ResponseDisplayer():
         """
         response_index = 0
         scroll_pos = 0
-        terminal_offset = 5 # Size of options.
+        initial_display = True
+        terminal_offset = 6 # Size of options.
         code_height = os.get_terminal_size().lines - terminal_offset
 
         while True:
@@ -33,26 +34,30 @@ class ResponseDisplayer():
             displayed_response = self.conversation.internal_responses[response_index]
             scroll_limit = len(displayed_response.buffer.getvalue().splitlines()) - code_height
             print("")
-            self.display_response(displayed_response,scroll_pos,code_height,terminal_offset)
+            self.display_response(displayed_response,initial_display,scroll_pos,code_height,terminal_offset)
             selected = self.display_options(response_index, scroll_pos, scroll_limit)
             
             if selected == "left" and response_index > 0:
                 time.sleep(0.2)
                 response_index -= 1
                 scroll_pos = 0
+                initial_display = True
             elif selected == "right" and response_index < len(self.conversation.internal_responses) -1:
                 time.sleep(0.2)
                 response_index += 1
                 scroll_pos = 0
+                initial_display = True
             elif selected == "up":
                 scroll_pos -= 1
+                initial_display = False
             elif selected == "down":
                 scroll_pos += 1
+                initial_display = False
             else:
                 break
     
     
-    def display_response(self, response: IndividualResponse, scroll_pos: int, code_height: int, terminal_offset: int):
+    def display_response(self, response: IndividualResponse, initial_display: bool, scroll_pos: int, code_height: int, terminal_offset: int):
         """
         Displaying individual response.
 
@@ -65,11 +70,19 @@ class ResponseDisplayer():
         response.buffer.seek(0)
         lines = response.buffer.getvalue().splitlines()
 
-        os.system('cls' if os.name == 'nt' else 'clear')
+        if initial_display:
+            # Clearing terminal and printing all lines.
+            os.system('cls' if os.name == 'nt' else 'clear')
 
-        visible_lines = lines[scroll_pos:scroll_pos + code_height]
-        for line in visible_lines:
-            print(colored(line,color=response.colour,attrs=response.display_attrs))
+            visible_lines = lines[scroll_pos:scroll_pos + code_height]
+            for line in visible_lines:
+                print(colored(line,color=response.colour,attrs=response.display_attrs))
+        else:
+            sys.stdout.write(f"\033[{code_height+terminal_offset}A")
+            for line in lines[scroll_pos:scroll_pos + code_height]:
+                sys.stdout.write("\033[K")
+                sys.stdout.write(colored(line,color=response.colour,attrs=response.display_attrs) + "\n")
+            sys.stdout.flush()
 
 
     def display_options(self, response_index: int, scroll_pos: int, scroll_limit: int):
