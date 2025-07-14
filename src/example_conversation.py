@@ -10,8 +10,12 @@ from LLM_code_parser import ConversationResponse, ResponseDisplayer
 
 # - - - - - - - - - - - - - - - - - - -
 
+test_file = "examples/LLM_response_conversation.txt"
+
+# - - - - - - - - - - - - - - - - - - -
+
 if __name__ == "__main__":
-    f = open("output/test.txt", "r", encoding="utf-8")
+    f = open(test_file, "r", encoding="utf-8")
 
     conversation = ConversationResponse(f)
     display = ResponseDisplayer(conversation)

@@ -1,4 +1,4 @@
-examples
+examples/ticket.txt
+examples/output.txt
 .venv
-output
 *__pycache__
